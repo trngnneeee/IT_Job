@@ -5,9 +5,15 @@ import * as userValidate from "./../validate/user.validate"
 const router = Router();
 
 router.post(
-  '/register', 
+  '/register',
   userValidate.registerPost,
   userController.registerPost
+)
+
+router.post(
+  '/login',
+  userValidate.loginPost,
+  userController.loginPost
 )
 
 export default router;
