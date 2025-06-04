@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken"
 import UserAccount from "../model/user-account.model";
+import CompanyAccount from "../model/company-account.model";
 
 export const checkGet = async (req: Request, res: Response) => {
   try {
@@ -17,30 +18,47 @@ export const checkGet = async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`) as jwt.JwtPayload;
     const { id, email } = decoded;
 
+    // Tìm user
     const existAccount = await UserAccount.findOne({
       email: email,
       _id: id
     });
 
-    if (!existAccount) {
+    if (existAccount) {
+      const infoUser = {
+        id: existAccount.id,
+        fullName: existAccount.fullName,
+        email: existAccount.email
+      };
+
       res.json({
-        code: "error",
-        message: "Email không tồn tại trong hệ thống!"
+        code: "success",
+        message: "Kiểm tra Cookies thành công!",
+        infoUser: infoUser
       });
       return;
     }
 
-    const infoUser = {
-      id: existAccount.id,
-      fullName: existAccount.fullName,
-      email: existAccount.email
-    };
+    // Tìm company
+    const existCompanyAccount = await CompanyAccount.findOne({
+      email: email,
+      _id: id
+    });
+    if (existCompanyAccount) {
+      const infoCompany = {
+        id: existCompanyAccount.id,
+        fullName: existCompanyAccount.companyName,
+        email: existCompanyAccount.email
+      };
 
-    res.json({
-      code: "success",
-      message: "Kiểm tra Cookies thành công!",
-      infoUser: infoUser
-    })
+      res.json({
+        code: "success",
+        message: "Kiểm tra Cookies thành công!",
+        infoCompany: infoCompany
+      });
+      return;
+    }
+
   }
   catch (error) {
     res.clearCookie("token");

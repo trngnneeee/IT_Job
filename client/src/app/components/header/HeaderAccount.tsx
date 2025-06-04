@@ -3,10 +3,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export const HeaderAccount = () => {
-  const { isLogin, infoUser } = useAuth();
+  const { isLogin, infoUser, infoCompany } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = (link: string) => {
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/logout`, {
       credentials: "include"
     }) 
@@ -16,7 +16,7 @@ export const HeaderAccount = () => {
           alert(data.message);
         if (data.code == "success")
         {
-          router.push("/user/login");
+          router.push(link);
         }
       })
   }
@@ -58,7 +58,7 @@ export const HeaderAccount = () => {
                     </Link>
                   </li>
                   <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                    <Link onClick={handleLogout} href="" className="text-white font-[600] text-[16px]">
+                    <Link onClick={() => handleLogout("/user/login")} href="" className="text-white font-[600] text-[16px]">
                       Đăng xuất
                     </Link>
                   </li>
@@ -83,7 +83,7 @@ export const HeaderAccount = () => {
                       Quản lý CV
                     </Link>
                   </li>
-                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2 text-white font-[600] text-[16px]">
+                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2 text-white font-[600] text-[16px] cursor-pointer" onClick={() => handleLogout("/company/login")}>
                     Đăng xuất
                   </li>
                 </ul>
