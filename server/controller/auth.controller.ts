@@ -50,3 +50,11 @@ export const checkGet = async (req: Request, res: Response) => {
     });
   }
 }
+
+export const logoutGet = (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.json({
+    code: "success",
+    message: "Đăng xuất thành công!"
+  });
+}
