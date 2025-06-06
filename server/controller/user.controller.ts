@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserAccount from "./../model/user-account.model"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken';
+import { AccountRequest } from "../interface/request.interface";
 
 export const registerPost = async (req: Request, res: Response) => {
   const existAccount = await UserAccount.findOne({
@@ -75,4 +76,25 @@ export const loginPost = async (req: Request, res: Response) => {
     code: "success",
     message: "Đăng nhập thành công!"
   });
+}
+
+export const profilePatch = async (req: AccountRequest, res: Response) => {
+  if (req.file)
+  {
+    req.body.avatar = req.file.path;
+  }
+  else
+  {
+    delete req.body.avatar;
+  }
+
+  await UserAccount.updateOne({
+    _id: req.account.id,
+    email: req.body.email
+  }, req.body);
+
+  res.json({
+    code: "success",
+    message: "Cập nhật thành công!"
+  })
 }

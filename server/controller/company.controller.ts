@@ -74,3 +74,9 @@ export const loginPost = async (req: Request, res: Response) => {
   })
 }
 
+export const profilePost = (req: Request, res: Response) => {
+  res.json({
+    code: "success",
+    
+  })
+}

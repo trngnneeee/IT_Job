@@ -16,4 +16,9 @@ router.post(
   companyController.loginPost
 )
 
+router.post(
+  '/profile',
+  companyController.profilePost
+)
+
 export default router;

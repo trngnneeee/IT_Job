@@ -28,7 +28,9 @@ export const checkGet = async (req: Request, res: Response) => {
       const infoUser = {
         id: existAccount.id,
         fullName: existAccount.fullName,
-        email: existAccount.email
+        email: existAccount.email,
+        phone: existAccount.phone,
+        avatar: existAccount.avatar
       };
 
       res.json({
