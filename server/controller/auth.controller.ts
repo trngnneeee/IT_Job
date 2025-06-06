@@ -49,8 +49,17 @@ export const checkGet = async (req: Request, res: Response) => {
     if (existCompanyAccount) {
       const infoCompany = {
         id: existCompanyAccount.id,
-        fullName: existCompanyAccount.companyName,
-        email: existCompanyAccount.email
+        companyName: existCompanyAccount.companyName,
+        logo: existCompanyAccount.logo,
+        city: existCompanyAccount.city,
+        address: existCompanyAccount.address,
+        companyModel: existCompanyAccount.companyModel,
+        companyEmployees: existCompanyAccount.companyEmployees,
+        workingTime: existCompanyAccount.workingTime,
+        WorkOvertime: existCompanyAccount.WorkOvertime,
+        email: existCompanyAccount.email,
+        phone: existCompanyAccount.phone,
+        description: existCompanyAccount.description,
       };
 
       res.json({

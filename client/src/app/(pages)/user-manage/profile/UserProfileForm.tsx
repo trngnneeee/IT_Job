@@ -13,8 +13,7 @@ import { Toaster, toast } from "sonner";
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginPreview);
 
-export const ProfileForm = () => {
-  const router = useRouter();
+export const UserProfileForm = () => {
   const { infoUser } = useAuth();
   const [avatars, setAvatars] = useState<any[]>();
   const [isValid, setIsValid] = useState(false);

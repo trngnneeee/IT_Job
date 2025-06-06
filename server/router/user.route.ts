@@ -24,7 +24,7 @@ router.post(
 
 router.patch(
   '/profile',
-  userMiddleware.verifyToken,
+  userMiddleware.userVerifyToken,
   upload.single('avatar'),
   userController.profilePatch
 )
