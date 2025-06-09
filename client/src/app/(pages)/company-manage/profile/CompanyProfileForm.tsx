@@ -2,13 +2,14 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import JustValidate from "just-validate";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
 import FilePondPluginPreview from "filepond-plugin-image-preview"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+import { EditorTinyMCE } from "@/app/components/editor/EditorTinyMCE";
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginPreview);
 
@@ -22,6 +23,7 @@ export const CompanyProfileForm = () => {
   const [cityList, setCityList] = useState<ICity[]>([]);
   const [logos, setLogos] = useState<any[]>();
   const [isValid, setIsValid] = useState(false);
+  const editorRef = useRef(null);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/city/list`)
@@ -85,7 +87,10 @@ export const CompanyProfileForm = () => {
       const WorkOvertime = event.target.WorkOvertime.value;
       const email = event.target.email.value;
       const phone = event.target.phone.value;
-      const description = event.target.description.value;
+      let description = "";
+      if (editorRef.current) {
+        description = (editorRef.current as any).getContent();
+      }
 
       const formData = new FormData();
       formData.append("companyName", companyName);
@@ -253,12 +258,10 @@ export const CompanyProfileForm = () => {
               <label htmlFor="description" className="block font-[500] text-[14px] text-black mb-[5px]">
                 Mô tả chi tiết
               </label>
-              <textarea
-                name="description"
-                id="description"
-                defaultValue={infoCompany.description}
-                className="w-[100%] h-[350px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
-              ></textarea>
+              <EditorTinyMCE
+                editorRef={editorRef}
+                value={infoCompany.description}
+              />
             </div>
             <div className="sm:col-span-2">
               <button className="bg-[#0088FF] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white">
