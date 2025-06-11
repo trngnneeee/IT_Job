@@ -7,16 +7,22 @@ import { levelList, workingFormList } from "@/config/variable.config";
 
 export const JobList = () => {
   const [jobList, setJobList] = useState<any[]>([]);
+  const [totalPage, settotalPage] = useState<any>();
+  const [page, setPage] = useState("");
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/job/list`, {
+    let query = "";
+    if (page) query += `?page=${page}`
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/job/list${query}`, {
       credentials: "include"
     })
       .then(res => res.json())
       .then(data => {
         setJobList(data.jobList);
+        settotalPage(data.totalPage);
       })
-  }, [])
-  
+  }, [page])
+
   return (
     <>
       <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
@@ -80,6 +86,17 @@ export const JobList = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-[30px]">
+        <select
+          name=""
+          className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
+          onChange={(event) => setPage(event.target.value)}
+        >
+          {[...Array(totalPage)].map((_, i) => (
+            <option value={i + 1} key={i}>Trang {i + 1}</option>
+          ))}
+        </select>
       </div>
     </>
   );
