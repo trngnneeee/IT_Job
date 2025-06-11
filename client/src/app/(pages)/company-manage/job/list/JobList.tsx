@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaUserTie, FaBriefcase, FaLocationDot } from "react-icons/fa6";
 import { levelList, workingFormList } from "@/config/variable.config";
+import { DeleteButton } from "@/app/components/button/DeleteButton";
 
 export const JobList = () => {
   const [jobList, setJobList] = useState<any[]>([]);
   const [totalPage, settotalPage] = useState<any>();
   const [page, setPage] = useState("");
+
   useEffect(() => {
     let query = "";
     if (page) query += `?page=${page}`
@@ -22,6 +24,10 @@ export const JobList = () => {
         settotalPage(data.totalPage);
       })
   }, [page])
+
+  const handleDeleteSuccess = (id: string) => {
+    setJobList(jobList.filter((item) => item.id !== id));
+  }
 
   return (
     <>
@@ -80,9 +86,11 @@ export const JobList = () => {
               <Link href={`/company-manage/job/edit/${item.id}`} className="bg-[#FFB200] rounded-[4px] font-[400] text-[14px] text-black inline-block py-[8px] px-[20px]">
                 Sửa
               </Link>
-              <Link href="#" className="bg-[#FF0000] rounded-[4px] font-[400] text-[14px] text-white inline-block py-[8px] px-[20px]">
-                Xóa
-              </Link>
+              <DeleteButton
+                api={`${process.env.NEXT_PUBLIC_BASE_URL}/company/job/delete/${item.id}`}
+                item={item}
+                onSuccess={handleDeleteSuccess}
+              />
             </div>
           </div>
         ))}

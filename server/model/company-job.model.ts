@@ -11,13 +11,7 @@ const schema = new mongoose.Schema({
   description: String,
   images: Array,
   updatedBy: String,
-  createdBy: String,
-  deleted: {
-    type: Boolean,
-    default: false
-  },
-  deletedBy: String,
-  deletedAt: String
+  createdBy: String
 }, {
   timestamps: true
 })

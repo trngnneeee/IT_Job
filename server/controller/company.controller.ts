@@ -242,3 +242,25 @@ export const editPost = async (req: AccountRequest, res: Response) => {
     })
   }
 }
+
+export const jobDelete = async (req: AccountRequest, res: Response) => {
+  try
+  {
+    const id = req.params.id;
+    await CompanyJob.deleteOne({
+      _id: id,
+      companyId: req.account.id
+    });
+    res.json({
+      code: "success",
+      message: "Xóa công việc thành công"
+    });
+  }
+  catch(error)
+  {
+    res.json({
+      code: "error",
+      message: error
+    })
+  }
+}
