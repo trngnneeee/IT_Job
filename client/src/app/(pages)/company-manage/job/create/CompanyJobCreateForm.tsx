@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import JustValidate from "just-validate";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/navigation";
+import { levelList, workingFormList } from "@/config/variable.config";
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginPreview);
 
@@ -166,12 +167,9 @@ export const CompanyJobCreateForm = () => {
             id="level"
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           >
-            <option value="intern">Intern</option>
-            <option value="fresher">Fresher</option>
-            <option value="junior">Junior</option>
-            <option value="middle">Middle</option>
-            <option value="senior">Senior</option>
-            <option value="manager">Manager</option>
+            {levelList.map((item, index) => (
+              <option value={item.value} key={index}>{item.label}</option>
+            ))}
           </select>
         </div>
         <div className="">
@@ -183,9 +181,9 @@ export const CompanyJobCreateForm = () => {
             id="workingForm"
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           >
-            <option value="office">Tại văn phòng</option>
-            <option value="remote">Làm từ xa</option>
-            <option value="flexible">Linh hoạt</option>
+            {workingFormList.map((item, index) => (
+              <option value={item.value} key={index}>{item.label}</option>
+            ))}
           </select>
         </div>
         <div className="sm:col-span-2">

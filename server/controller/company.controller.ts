@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { AccountRequest } from "../interface/request.interface";
 import CompanyJob from "../model/company-job.model";
+import { title } from "process";
+import Cities from "../model/city.model";
 
 export const registerPost = async (req: Request, res: Response) => {
   const existAccount = await CompanyAccount.findOne({
@@ -116,5 +118,37 @@ export const jobCreatePost = async (req: AccountRequest, res: Response) => {
   res.json({
     code: "success",
     message: "Tạo công việc thành công!"
+  })
+}
+
+export const listGet = async (req: AccountRequest, res: Response) => {
+  const jobRawList = await CompanyJob.find({
+    companyId: req.account.id
+  });
+  const jobList = [];
+  for (const item of jobRawList)
+  {
+    const city = await Cities.findOne({
+      _id: req.account.city
+    })
+    jobList.push({
+      title: item.title,
+      salaryMin: item.salaryMin,
+      salaryMax: item.salaryMax,
+      level: item.level,
+      workingForm: item.workingForm,
+      technologies: item.technologies,
+      description: item.description,
+      images: item.images,
+      company: req.account.companyName,
+      logo: req.account.logo,
+      city: city?.name
+    })
+  }
+  
+  res.json({
+    code: "success",
+    message: "Lấy dữ liệu thành công!",
+    jobList: jobList
   })
 }
