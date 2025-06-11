@@ -40,4 +40,17 @@ router.get(
   companyController.listGet
 )
 
+router.get(
+  "/job/edit/:id",
+  companyMiddleware.companyVerifyToken,
+  companyController.editGet
+)
+
+router.patch(
+  "/job/edit/:id",
+  companyMiddleware.companyVerifyToken,
+  upload.array("images"),
+  companyController.editPost
+)
+
 export default router;
