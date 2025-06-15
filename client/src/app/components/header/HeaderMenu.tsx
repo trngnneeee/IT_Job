@@ -22,25 +22,51 @@ export const HeaderMenu = (
           children: [
             {
               name: "ReactJS",
-              link: "#",
+              link: "/search?language=ReactJS",
               children: null
             },
             {
               name: "NodeJS",
-              link: "#",
+              link: "/search?language=NodeJS",
+              children: null
+            },
+            {
+              name: "HTML5",
+              link: "/search?language=HTML5",
+              children: null
+            },
+            {
+              name: "CSS5",
+              link: "/search?language=CSS3",
+              children: null
+            },
+            {
+              name: "Javascript",
+              link: "/search?language=Javascript",
               children: null
             }
           ]
         },
         {
-          name: "Việc làm IT theo công ty",
-          link: "#",
-          children: null
-        },
-        {
           name: "Việc làm IT theo thành phố",
           link: "#",
-          children: null
+          children: [
+            {
+              name: "Hà Nội",
+              link: "/search?language=hanoi",
+              children: null
+            },
+            {
+              name: "Hồ Chí Minh",
+              link: "/search?language=hochiminh",
+              children: null
+            },
+            {
+              name: "Đà Nẵng",
+              link: "/search?language=danang",
+              children: null
+            },
+          ]
         }
       ]
     },
@@ -50,17 +76,17 @@ export const HeaderMenu = (
       children: [
         {
           name: "FPT Software",
-          link: "#",
+          link: "/search?company=FPT Software",
           children: null
         },
         {
           name: "Techcombank",
-          link: "#",
+          link: "/search?company=Techcombank",
           children: null
         },
         {
           name: "MB Bank",
-          link: "#",
+          link: "/search?company=MB Bank",
           children: null
         }
       ]
@@ -120,17 +146,17 @@ export const HeaderMenu = (
                     )}
                     {menuSub1.children && (
                       <ul className="lg:absolute relative top-[0px] lg:left-[100%] left-0 lg:w-[280px] w-full bg-[#000065] hidden group-hover/sub-2:block z-[999]">
-                        {menu.children.map((menuSub2, indexSub2) => (
+                        {menuSub1.children.map((menuSub2, indexSub2) => (
                           <li 
                             key={indexSub2}
                             className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096]"
                           >
-                            <a 
+                            <Link 
                               href={menuSub2.link}
                               className="text-white font-[600] text-[16px]"
                             >
                               {menuSub2.name}
-                            </a>
+                            </Link>
                           </li>
                         ))}
                       </ul>
