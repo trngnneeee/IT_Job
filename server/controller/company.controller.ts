@@ -264,3 +264,43 @@ export const jobDelete = async (req: AccountRequest, res: Response) => {
     })
   }
 }
+
+export const searchGet = async (req: Request, res: Response) => {
+  let limitItem = 9;
+  if (req.query.limitItem)
+  {
+    limitItem = parseInt(`${req.query.limitItem}`);
+  }
+  const find = {};
+  const companyRawList = await CompanyAccount.find(find).limit(limitItem);
+
+  const companyList = [];
+  for (const item of companyRawList)
+  {
+    const tmp = {
+      id: item.id,
+      companyName: item.companyName,
+      logo: item.logo,
+      cityName: "",
+      totalJob: 0
+    };
+
+    const cityInfo = await Cities.findOne({
+      _id: item.city
+    })
+
+    console.log(tmp.cityName);
+
+    tmp.totalJob = await CompanyJob.countDocuments({
+      companyId: item.id
+    })
+
+    companyList.push(tmp);
+  }
+  
+  res.json({
+    code: "success",
+    message: "Lấy dữ liệu thành công!",
+    companyList: companyList
+  })
+}

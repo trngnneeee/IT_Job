@@ -59,4 +59,10 @@ router.delete(
   companyController.jobDelete
 )
 
+router.get(
+  "/list",
+  companyMiddleware.companyVerifyToken,
+  companyController.searchGet
+)
+
 export default router;
