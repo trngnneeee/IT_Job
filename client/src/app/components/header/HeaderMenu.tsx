@@ -53,17 +53,17 @@ export const HeaderMenu = (
           children: [
             {
               name: "Hà Nội",
-              link: "/search?language=Hà Nội",
+              link: "/search?city=Hà Nội",
               children: null
             },
             {
               name: "Hồ Chí Minh",
-              link: "/search?language=Hồ Chí Minh",
+              link: "/search?city=Hồ Chí Minh",
               children: null
             },
             {
               name: "Đà Nẵng",
-              link: "/search?language=Đà Nẵng",
+              link: "/search?city=Đà Nẵng",
               children: null
             },
           ]

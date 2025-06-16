@@ -7,15 +7,15 @@ export const Section2 = () => {
   const [companyList, setCompanyList] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/list?limitItem=9`, {
-      credentials: "include"
-    })
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/list?limitItem=9`)
       .then(res => res.json())
       .then((data) => {
         setCompanyList(data.companyList)
       })
   }, [])
-  
+
+  if (!companyList) 
+    return <></>
   return (
     <>
       <div className="py-[60px]">
@@ -27,7 +27,7 @@ export const Section2 = () => {
           <div className="grid lg:grid-cols-3 grid-cols-2 sm:gap-[20px] gap-x-[10px] gap-y-[20px]">
             {/* Item */}
             {companyList.map((item, index) => (
-              <CardCompanyItem 
+              <CardCompanyItem
                 key={index}
                 companyDetail={item}
               />

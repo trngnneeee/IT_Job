@@ -61,7 +61,6 @@ router.delete(
 
 router.get(
   "/list",
-  companyMiddleware.companyVerifyToken,
   companyController.searchGet
 )
 

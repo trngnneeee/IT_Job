@@ -13,7 +13,7 @@ export const Section1 = () => {
     const city = event.target.city.value;
     const keyword = event.target.keyword.value;
 
-    router.push(`/search?city=${city}?keyword=${keyword}`);
+    router.push(`/search?city=${city}&keyword=${keyword}`);
   }
   
   return (

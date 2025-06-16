@@ -15,6 +15,39 @@ export const searchGet = async (req: Request, res: Response) => {
       find.technologies = req.query.language;
     }
 
+    if (req.query.city)
+    {
+      const city = await Cities.findOne({
+        name: req.query.city
+      });
+
+      if (city)
+      {
+        const accountCompanyList = await CompanyAccount.find({
+          city: city.id
+        })
+        const idList = accountCompanyList.map((item) => item.id);
+        find.companyId = { $in: idList }
+      }
+    }
+
+    if (req.query.company)
+    {
+      const companyDetail = await CompanyAccount.findOne({
+        companyName: req.query.company
+      });
+      find.companyId = companyDetail?.id;
+    }
+
+    if (req.query.keyword)
+    {
+      const keywordRegex = new RegExp(`${req.query.keyword}`, "i");
+      find["$or"] = [
+        { title: keywordRegex },
+        { technologies: keywordRegex }
+      ];
+    }
+
     const jobs = await CompanyJob.find(find).sort({
       createdAt: "desc"
     })
