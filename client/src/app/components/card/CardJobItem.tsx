@@ -11,7 +11,7 @@ export const CardJobItem = (props: {
   return (
     <>
       <Link 
-        href="" 
+        href={`/job/detail/${job.id}` }
         className="border border-[#DEDEDE] rounded-[8px] flex flex-col relative truncate"
         style={{
           background: "linear-gradient(180deg, #F6F6F6 2.38%, #FFFFFF 70.43%)"

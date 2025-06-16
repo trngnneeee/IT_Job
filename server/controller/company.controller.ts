@@ -244,8 +244,7 @@ export const editPost = async (req: AccountRequest, res: Response) => {
 }
 
 export const jobDelete = async (req: AccountRequest, res: Response) => {
-  try
-  {
+  try {
     const id = req.params.id;
     await CompanyJob.deleteOne({
       _id: id,
@@ -256,8 +255,7 @@ export const jobDelete = async (req: AccountRequest, res: Response) => {
       message: "Xóa công việc thành công"
     });
   }
-  catch(error)
-  {
+  catch (error) {
     res.json({
       code: "error",
       message: error
@@ -267,16 +265,14 @@ export const jobDelete = async (req: AccountRequest, res: Response) => {
 
 export const searchGet = async (req: Request, res: Response) => {
   let limitItem = 9;
-  if (req.query.limitItem)
-  {
+  if (req.query.limitItem) {
     limitItem = parseInt(`${req.query.limitItem}`);
   }
   const find = {};
   const companyRawList = await CompanyAccount.find(find).limit(limitItem);
 
   const companyList = [];
-  for (const item of companyRawList)
-  {
+  for (const item of companyRawList) {
     const tmp = {
       id: item.id,
       companyName: item.companyName,
@@ -297,7 +293,7 @@ export const searchGet = async (req: Request, res: Response) => {
 
     companyList.push(tmp);
   }
-  
+
   res.json({
     code: "success",
     message: "Lấy dữ liệu thành công!",

@@ -5,6 +5,7 @@ import companyRouter from "./company.route"
 import cityRouter from "./city.route"
 import uploadRouter from "./upload.route"
 import searchRouter from "./search.route"
+import jobRouter from "./job.route"
 
 const router = express.Router();
 
@@ -36,6 +37,11 @@ router.use(
 router.use(
   "/search",
   searchRouter
+)
+
+router.use(
+  "/job",
+  jobRouter
 )
 
 export default router;
