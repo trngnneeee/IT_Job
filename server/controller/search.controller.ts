@@ -5,7 +5,9 @@ import CompanyAccount from "../model/company-account.model";
 
 export const searchGet = async (req: Request, res: Response) => {
   const jobList = [];
-  
+  let totalPage = 0;
+  let totalJob = 0;
+
   if (Object.keys(req.query).length > 0)
   {
     const find: any = {};
@@ -58,9 +60,26 @@ export const searchGet = async (req: Request, res: Response) => {
       find.workingForm = req.query.workingForm
     }
 
+    const limit = 3;
+    const totalRecord = await CompanyJob.countDocuments(find);
+    totalJob = totalRecord;
+    totalPage = Math.ceil(totalRecord / limit);
+    let page = 1;
+    if (req.query.page)
+    {
+      const tmp = parseInt(`${req.query.page}`);
+      if (tmp > 0) page = tmp;
+    }
+    if (totalPage != 0 && page > totalPage)
+    {
+      page = totalPage;
+    }
+    const skip = (page - 1) * limit;
+    
+
     const jobs = await CompanyJob.find(find).sort({
       createdAt: "desc"
-    })
+    }).limit(limit).skip(skip)
     for (const job of jobs)
     {
       const tmp = {
@@ -92,6 +111,8 @@ export const searchGet = async (req: Request, res: Response) => {
   res.json({
     code: "success",
     message: "Lấy dữ liệu thành công",
-    jobList: jobList
+    jobList: jobList,
+    totalPage: totalPage,
+    totalRecord: totalJob
   })
 }
