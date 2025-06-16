@@ -1,30 +1,63 @@
 "use client"
 
 import { CardJobItem } from "@/app/components/card/CardJobItem";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { levelList, workingFormList } from "@/config/variable.config";
 
 export const SearchContainer = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const language = searchParams.get("language") || "";
   const city = searchParams.get("city") || "";
   const company = searchParams.get("company") || "";
   const keyword = searchParams.get("keyword") || "";
+  const level = searchParams.get("level") || "";
+  const workingForm = searchParams.get("workingForm") || "";
   const [jobList, setJobList] = useState<any[]>([]);
-  
+
   useEffect(() => {
-    let query = "";
-    if (language) query += `?language=${language}`;
-    if (city) query += `?city=${city}`;
-    if (company) query += `?company=${company}`;
-    if (keyword) query += `?keyword=${keyword}`;
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/search${query}`)
+    const params = new URLSearchParams();
+    if (language) params.append("language", language);
+    if (city) params.append("city", city);
+    if (company) params.append("company", company);
+    if (keyword) params.append("keyword", keyword);
+    if (level) params.append("level", level);
+    if (workingForm) params.append("workingForm", workingForm);
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/search?${params.toString()}`)
       .then(res => res.json())
-      .then((data) => {
+      .then(data => {
         setJobList(data.jobList);
-      })
-  }, [language, city, company, keyword])
-  
+      });
+  }, [language, city, company, keyword, level, workingForm]);
+
+  const handleLevelFilter = (event: any) => {
+    const value = event.target.value;
+
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set("level", value);
+    } else {
+      params.delete("level");
+    }
+
+    router.push(`?${params.toString()}`);
+  }
+
+  const handleWorkingFormFilter = (event: any) => {
+    const value = event.target.value;
+
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set("workingForm", value);
+    } else {
+      params.delete("workingForm");
+    }
+
+    router.push(`?${params.toString()}`);
+  }
+
   return (
     <>
       <div className="container mx-auto px-[16px]">
@@ -39,26 +72,33 @@ export const SearchContainer = () => {
             boxShadow: "0px 4px 20px 0px #0000000F"
           }}
         >
-          <select name="" className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]">
+          <select
+            name=""
+            className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
+            onChange={handleLevelFilter}
+            defaultValue={level}
+          >
             <option value="">Cấp bậc</option>
-            <option value="">Intern</option>
-            <option value="">Fresher</option>
-            <option value="">Junior</option>
-            <option value="">Middle</option>
-            <option value="">Senior</option>
-            <option value="">Manager</option>
+            {levelList.map((item, index) => (
+              <option key={index} value={item.value}>{item.label}</option>
+            ))}
           </select>
-          <select name="" className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]">
+          <select 
+            name="" 
+            className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
+            onChange={handleWorkingFormFilter}
+            value={workingForm}
+          >
             <option value="">Hình thức làm việc</option>
-            <option value="">Tại văn phòng</option>
-            <option value="">Làm từ xa</option>
-            <option value="">Linh hoạt</option>
+            {workingFormList.map((item, index) => (
+              <option key={index} value={item.value}>{item.label}</option>
+            ))}
           </select>
         </div>
 
         <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
           {jobList && jobList.length > 0 && jobList.map((item, index) => (
-            <CardJobItem 
+            <CardJobItem
               job={item}
               key={index}
             />

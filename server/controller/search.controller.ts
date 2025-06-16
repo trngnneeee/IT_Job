@@ -48,6 +48,16 @@ export const searchGet = async (req: Request, res: Response) => {
       ];
     }
 
+    if (req.query.level)
+    {
+      find.level = req.query.level;
+    }
+
+    if (req.query.workingForm)
+    {
+      find.workingForm = req.query.workingForm
+    }
+
     const jobs = await CompanyJob.find(find).sort({
       createdAt: "desc"
     })
