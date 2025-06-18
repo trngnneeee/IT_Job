@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import CompanyJob from "../model/company-job.model";
 import CompanyAccount from "../model/company-account.model";
+import CV from "../model/cv.model";
 
 export const detailGet = async (req: Request, res: Response) => {
   try {
@@ -9,6 +10,7 @@ export const detailGet = async (req: Request, res: Response) => {
       _id: id
     })
     const jobDetail = {
+      id: jobRawDetail?.id,
       companyId: jobRawDetail?.id,
       title: jobRawDetail?.title,
       companyName: "",
@@ -54,4 +56,16 @@ export const detailGet = async (req: Request, res: Response) => {
       message: error
     })
   }
+}
+
+export const applyPost = async (req: Request, res: Response) => {
+  req.body.fileCV = req.file? req.file.path : "";
+
+  const newRecord = new CV(req.body);
+  await newRecord.save();
+  
+  res.json({
+    code: "success",
+    message: "Đã gửi CV thành công!"
+  })
 }

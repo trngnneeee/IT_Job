@@ -49,7 +49,7 @@ export const CompanyProfileForm = () => {
         .addField('#companyName', [
           {
             rule: 'required',
-            errorMessage: 'Vui lòng nhập email!'
+            errorMessage: 'Vui lòng nhập tên công ty!'
           },
         ])
         .addField('#email', [
