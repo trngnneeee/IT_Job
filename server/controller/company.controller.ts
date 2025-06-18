@@ -268,8 +268,25 @@ export const searchGet = async (req: Request, res: Response) => {
   if (req.query.limitItem) {
     limitItem = parseInt(`${req.query.limitItem}`);
   }
-  const find = {};
-  const companyRawList = await CompanyAccount.find(find).limit(limitItem);
+
+   const find = {};
+
+  const totalRecord = await CompanyAccount.countDocuments(find);
+  const totalPage = Math.ceil(totalRecord / limitItem);
+  let page = 1;
+  if (req.query.page)
+  {
+    const tmp = parseInt(`${req.query.page}`);
+    if (tmp > 0) page = tmp;
+  }
+  if (totalPage != 0 && page > totalPage)
+  {
+    page = totalPage;
+  }
+
+  const skip = (page - 1) * limitItem;
+
+  const companyRawList = await CompanyAccount.find(find).limit(limitItem).skip(skip);
 
   const companyList = [];
   for (const item of companyRawList) {
@@ -284,19 +301,16 @@ export const searchGet = async (req: Request, res: Response) => {
     const cityInfo = await Cities.findOne({
       _id: item.city
     })
-
-    console.log(tmp.cityName);
-
     tmp.totalJob = await CompanyJob.countDocuments({
       companyId: item.id
     })
-
     companyList.push(tmp);
   }
 
   res.json({
     code: "success",
     message: "Lấy dữ liệu thành công!",
-    companyList: companyList
+    companyList: companyList,
+    totalPage: totalPage
   })
 }
