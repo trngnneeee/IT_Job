@@ -64,4 +64,9 @@ router.get(
   companyController.searchGet
 )
 
+router.get(
+  "/detail/:id",
+  companyController.companyDetailGet
+)
+
 export default router;

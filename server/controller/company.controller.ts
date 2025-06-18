@@ -314,3 +314,62 @@ export const searchGet = async (req: Request, res: Response) => {
     totalPage: totalPage
   })
 }
+
+export const companyDetailGet = async (req: Request, res: Response) => {
+  try
+  {
+    const id = req.params.id;
+    
+    const rawCompanyDetail = await CompanyAccount.findOne({
+      _id: id
+    });
+
+    const companyDetail = {
+      companyName: rawCompanyDetail?.companyName,
+      address: rawCompanyDetail?.address,
+      companyModel: rawCompanyDetail?.companyModel,
+      companyEmployees: rawCompanyDetail?.companyEmployees,
+      workingTime: rawCompanyDetail?.workingTime,
+      WorkOvertime: rawCompanyDetail?.WorkOvertime,
+      description: rawCompanyDetail?.description,
+    }
+
+    const rawJobList = await CompanyJob.find({
+      companyId: rawCompanyDetail?.id
+    });
+
+    const city = await Cities.findOne({
+      _id: rawCompanyDetail?.city
+    });
+
+    const jobList = [];
+    for (const job of rawJobList)
+    {
+      jobList.push({
+        id: job.id,
+        title: job.title,
+        salaryMin: job.salaryMin,
+        salaryMax: job.salaryMax,
+        level: job.level,
+        workingForm: job.workingForm,
+        technologies: job.technologies,
+        logo: rawCompanyDetail?.logo,
+        city: city?.name
+      })
+    }
+
+    res.json({
+      code: "success",
+      message: "Lấy dữ liệu thành công!",
+      companyDetail: companyDetail,
+      jobList: jobList
+    })
+  }
+  catch(error)
+  {
+    res.json({
+      code: "error",
+      message: error
+    })
+  }
+}

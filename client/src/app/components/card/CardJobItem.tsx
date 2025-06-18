@@ -30,7 +30,7 @@ export const CardJobItem = (props: {
         >
           <img 
             src={job.logo} 
-            alt="Frontend Engineer (ReactJS)"
+            alt={job.title}
             className="w-[100%] h-[100%] object-contain"
           />
         </div>
