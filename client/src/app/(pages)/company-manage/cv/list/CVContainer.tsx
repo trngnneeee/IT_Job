@@ -1,8 +1,6 @@
 "use client"
 
-import Link from "next/dist/client/link";
 import { useEffect, useState } from "react";
-import { FaBriefcase, FaCircleCheck, FaEnvelope, FaEye, FaPhone, FaUserTie } from "react-icons/fa6";
 import { CVItem } from "./CVItem";
 
 export const CVContainer = () => {

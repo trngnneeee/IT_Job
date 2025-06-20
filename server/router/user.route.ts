@@ -29,4 +29,16 @@ router.patch(
   userController.profilePatch
 )
 
+router.get(
+  "/cv/list",
+  userMiddleware.userVerifyToken,
+  userController.cvListGet
+)
+
+router.delete(
+  "/cv/delete/:id",
+  userMiddleware.userVerifyToken,
+  userController.cvDelete
+)
+
 export default router;

@@ -53,7 +53,7 @@ export const HeaderAccount = () => {
                     </Link>
                   </li>
                   <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                    <Link href="" className="text-white font-[600] text-[16px]">
+                    <Link href="/user-manage/cv/list" className="text-white font-[600] text-[16px]">
                       Quản lý CV đã gửi
                     </Link>
                   </li>
