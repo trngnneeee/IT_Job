@@ -270,18 +270,16 @@ export const searchGet = async (req: Request, res: Response) => {
     limitItem = parseInt(`${req.query.limitItem}`);
   }
 
-   const find = {};
+  const find = {};
 
   const totalRecord = await CompanyAccount.countDocuments(find);
   const totalPage = Math.ceil(totalRecord / limitItem);
   let page = 1;
-  if (req.query.page)
-  {
+  if (req.query.page) {
     const tmp = parseInt(`${req.query.page}`);
     if (tmp > 0) page = tmp;
   }
-  if (totalPage != 0 && page > totalPage)
-  {
+  if (totalPage != 0 && page > totalPage) {
     page = totalPage;
   }
 
@@ -317,10 +315,9 @@ export const searchGet = async (req: Request, res: Response) => {
 }
 
 export const companyDetailGet = async (req: Request, res: Response) => {
-  try
-  {
+  try {
     const id = req.params.id;
-    
+
     const rawCompanyDetail = await CompanyAccount.findOne({
       _id: id
     });
@@ -344,8 +341,7 @@ export const companyDetailGet = async (req: Request, res: Response) => {
     });
 
     const jobList = [];
-    for (const job of rawJobList)
-    {
+    for (const job of rawJobList) {
       jobList.push({
         id: job.id,
         title: job.title,
@@ -366,8 +362,7 @@ export const companyDetailGet = async (req: Request, res: Response) => {
       jobList: jobList
     })
   }
-  catch(error)
-  {
+  catch (error) {
     res.json({
       code: "error",
       message: error
@@ -380,7 +375,7 @@ export const cvListGet = async (req: AccountRequest, res: Response) => {
     companyId: req.account.id
   });
   const jobIDList = jobList.map((item) => item.id);
-  
+
   const CVList = [];
   const rawCVList = await CV.find({
     jobId: { $in: jobIDList }
@@ -388,8 +383,7 @@ export const cvListGet = async (req: AccountRequest, res: Response) => {
     createdAt: "desc"
   })
 
-  for (const item of rawCVList)
-  {
+  for (const item of rawCVList) {
     const tmp = {
       id: item.id,
       title: "",
@@ -404,13 +398,12 @@ export const cvListGet = async (req: AccountRequest, res: Response) => {
       status: item.status,
       fileCV: item.fileCV
     };
-    
+
     const jobDetail = await CompanyJob.findOne({
       _id: item.jobId
     });
 
-    if (jobDetail)
-    {
+    if (jobDetail) {
       tmp.title = `${jobDetail.title}`;
       tmp.salaryMin = parseInt(`${jobDetail.salaryMin}`);
       tmp.salaryMax = parseInt(`${jobDetail.salaryMax}`);
@@ -429,16 +422,14 @@ export const cvListGet = async (req: AccountRequest, res: Response) => {
 }
 
 export const cvDetailGet = async (req: AccountRequest, res: Response) => {
-  try
-  {
+  try {
     const id = req.params.id;
-    
+
     const infoCV = await CV.findOne({
       _id: id
     });
 
-    if (!infoCV)
-    {
+    if (!infoCV) {
       res.json({
         code: "error",
         message: "ID không hợp lệ!"
@@ -450,8 +441,7 @@ export const cvDetailGet = async (req: AccountRequest, res: Response) => {
       _id: infoCV.jobId,
       companyId: req.account.id
     });
-    if (!rawJobDetail)
-    {
+    if (!rawJobDetail) {
       res.json({
         code: "error",
         message: "Bạn không có quyền truy cập!"
@@ -476,6 +466,12 @@ export const cvDetailGet = async (req: AccountRequest, res: Response) => {
       technologies: rawJobDetail.technologies,
     }
 
+    await CV.updateOne({
+      _id: id
+    }, {
+      viewed: true
+    })
+
     res.json({
       code: "success",
       message: "Lấy dữ liệu thành công!",
@@ -483,8 +479,100 @@ export const cvDetailGet = async (req: AccountRequest, res: Response) => {
       jobDetail: jobDetail
     })
   }
-  catch(error)
-  {
+  catch (error) {
+    res.json({
+      code: "error",
+      message: error
+    })
+  }
+}
+
+export const cvChangeStatusPatch = async (req: AccountRequest, res: Response) => {
+  try {
+    const id = req.body.id;
+    const status = req.body.status;
+
+    const infoCV = await CV.findOne({
+      _id: id
+    });
+
+    if (!infoCV) {
+      res.json({
+        code: "error",
+        message: "ID không hợp lệ!"
+      });
+      return;
+    }
+
+    const rawJobDetail = await CompanyJob.findOne({
+      _id: infoCV.jobId,
+      companyId: req.account.id
+    });
+    if (!rawJobDetail) {
+      res.json({
+        code: "error",
+        message: "Bạn không có quyền truy cập!"
+      });
+      return;
+    }
+
+    await CV.updateOne({
+      _id: id
+    }, {
+      status: status
+    })
+
+    res.json({
+      code: "success",
+      message: "Cập nhật thành công!"
+    })
+  }
+  catch (error) {
+    res.json({
+      code: "error",
+      message: error
+    })
+  }
+}
+
+export const cvDelete = async (req: AccountRequest, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    const infoCV = await CV.findOne({
+      _id: id
+    });
+
+    if (!infoCV) {
+      res.json({
+        code: "error",
+        message: "ID không hợp lệ!"
+      });
+      return;
+    }
+
+    const rawJobDetail = await CompanyJob.findOne({
+      _id: infoCV.jobId,
+      companyId: req.account.id
+    });
+    if (!rawJobDetail) {
+      res.json({
+        code: "error",
+        message: "Bạn không có quyền truy cập!"
+      });
+      return;
+    }
+
+    await CV.deleteOne({
+      _id: id
+    })
+
+    res.json({
+      code: "success",
+      message: "Xóa thành công!"
+    })
+  }
+  catch (error) {
     res.json({
       code: "error",
       message: error

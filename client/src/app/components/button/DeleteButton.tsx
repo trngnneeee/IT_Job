@@ -9,7 +9,7 @@ export const DeleteButton = (props: {
   const { api, item, onSuccess } = props;
 
   const handleDelete = () => {
-    const confirm = window.confirm(`Xác nhận xóa công việc ${item.title}`);
+    const confirm = window.confirm(`Xác nhận xóa bản ghi?`);
     if (confirm)
     {
       fetch(api, {

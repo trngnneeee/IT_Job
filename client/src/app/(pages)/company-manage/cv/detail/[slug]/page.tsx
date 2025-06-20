@@ -44,7 +44,7 @@ export default async function CompanyManageCVDetailPage({ params }: {
               <h2 className="sm:w-auto w-[100%] font-[700] text-[20px] text-black">
                 Thông tin CV
               </h2>
-              <Link href="#" className="font-[400] text-[14px] text-[#0088FF] underline">
+              <Link href="/company-manage/cv/list" className="font-[400] text-[14px] text-[#0088FF] underline">
                 Quay lại danh sách
               </Link>
             </div>

@@ -81,4 +81,16 @@ router.get(
   companyController.cvDetailGet
 )
 
+router.patch(
+  "/cv/change-status",
+  companyMiddleware.companyVerifyToken,
+  companyController.cvChangeStatusPatch
+)
+
+router.delete(
+  "/cv/delete/:id",
+  companyMiddleware.companyVerifyToken,
+  companyController.cvDelete
+)
+
 export default router;
