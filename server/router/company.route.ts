@@ -69,4 +69,16 @@ router.get(
   companyController.companyDetailGet
 )
 
+router.get(
+  "/cv/list",
+  companyMiddleware.companyVerifyToken,
+  companyController.cvListGet
+)
+
+router.get(
+  "/cv/detail/:id",
+  companyMiddleware.companyVerifyToken,
+  companyController.cvDetailGet
+)
+
 export default router;

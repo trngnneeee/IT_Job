@@ -6,6 +6,7 @@ import { AccountRequest } from "../interface/request.interface";
 import CompanyJob from "../model/company-job.model";
 import { title } from "process";
 import Cities from "../model/city.model";
+import CV from "../model/cv.model";
 
 export const registerPost = async (req: Request, res: Response) => {
   const existAccount = await CompanyAccount.findOne({
@@ -363,6 +364,123 @@ export const companyDetailGet = async (req: Request, res: Response) => {
       message: "Lấy dữ liệu thành công!",
       companyDetail: companyDetail,
       jobList: jobList
+    })
+  }
+  catch(error)
+  {
+    res.json({
+      code: "error",
+      message: error
+    })
+  }
+}
+
+export const cvListGet = async (req: AccountRequest, res: Response) => {
+  const jobList = await CompanyJob.find({
+    companyId: req.account.id
+  });
+  const jobIDList = jobList.map((item) => item.id);
+  
+  const CVList = [];
+  const rawCVList = await CV.find({
+    jobId: { $in: jobIDList }
+  }).sort({
+    createdAt: "desc"
+  })
+
+  for (const item of rawCVList)
+  {
+    const tmp = {
+      id: item.id,
+      title: "",
+      fullName: item.fullName,
+      email: item.email,
+      phone: item.phone,
+      salaryMin: 0,
+      salaryMax: 0,
+      level: "",
+      workingForm: "",
+      viewed: item.viewed,
+      status: item.status,
+      fileCV: item.fileCV
+    };
+    
+    const jobDetail = await CompanyJob.findOne({
+      _id: item.jobId
+    });
+
+    if (jobDetail)
+    {
+      tmp.title = `${jobDetail.title}`;
+      tmp.salaryMin = parseInt(`${jobDetail.salaryMin}`);
+      tmp.salaryMax = parseInt(`${jobDetail.salaryMax}`);
+      tmp.level = `${jobDetail.level}`;
+      tmp.workingForm = `${jobDetail.workingForm}`;
+    }
+
+    CVList.push(tmp);
+  }
+
+  res.json({
+    code: "success",
+    message: "Lấy dữ liệu thành công!",
+    CVList: CVList
+  })
+}
+
+export const cvDetailGet = async (req: AccountRequest, res: Response) => {
+  try
+  {
+    const id = req.params.id;
+    
+    const infoCV = await CV.findOne({
+      _id: id
+    });
+
+    if (!infoCV)
+    {
+      res.json({
+        code: "error",
+        message: "ID không hợp lệ!"
+      });
+      return;
+    }
+
+    const rawJobDetail = await CompanyJob.findOne({
+      _id: infoCV.jobId,
+      companyId: req.account.id
+    });
+    if (!rawJobDetail)
+    {
+      res.json({
+        code: "error",
+        message: "Bạn không có quyền truy cập!"
+      });
+      return;
+    }
+
+    const cvDetail = {
+      fullName: infoCV.fullName,
+      email: infoCV.email,
+      phone: infoCV.phone,
+      fileCV: infoCV.fileCV,
+    }
+
+    const jobDetail = {
+      id: rawJobDetail.id,
+      title: rawJobDetail.title,
+      salaryMin: rawJobDetail.salaryMin,
+      salaryMax: rawJobDetail.salaryMax,
+      level: rawJobDetail.level,
+      workingForm: rawJobDetail.workingForm,
+      technologies: rawJobDetail.technologies,
+    }
+
+    res.json({
+      code: "success",
+      message: "Lấy dữ liệu thành công!",
+      cvDetail: cvDetail,
+      jobDetail: jobDetail
     })
   }
   catch(error)
